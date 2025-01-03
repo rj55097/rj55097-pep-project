@@ -6,6 +6,7 @@ import java.util.List;
 import org.eclipse.jetty.websocket.core.internal.messages.MessageReader;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import Model.Account;
 import Model.Message;
@@ -63,7 +64,14 @@ public class SocialMediaController {
 
     // #3
     private void postMessageHandler(Context ctx) throws JsonProcessingException {
-
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(ctx.body(), Message.class);
+        Message addedMessage = messageService.addMessage(message);
+        if(addedMessage!=null){
+            ctx.json(mapper.writeValueAsString(addedMessage));
+        }else{
+            ctx.status(400);
+        }
     }
 
     // #4
