@@ -22,9 +22,8 @@ public class AccountService {
 
     public Account addAccount(Account account) throws SQLException {
 
-        if (accountDAO.getAccount(account.getAccount_id()) == null) {
-            return accountDAO.addAccount(account);
-        }
-        return null;
+        return accountDAO.addAccount(account);
     }
+
+    
 }
