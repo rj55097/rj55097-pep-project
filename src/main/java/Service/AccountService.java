@@ -20,9 +20,14 @@ public class AccountService {
         this.accountDAO = accountDAO;
     }
 
-    public Account addAccount(Account account) throws SQLException {
+    // public Account addAccount(Account account) throws SQLException {
 
-        return accountDAO.addAccount(account);
+    //     return accountDAO.addAccount(account);
+    // }
+
+    public Account addAccount(Account account) throws SQLException {
+        return (account.getUsername().length() > 0 && account.getPassword().length() > 4 && accountDAO.verifyAccount(account) == null)
+            ? accountDAO.registerAccount(account) : null;
     }
 
     
