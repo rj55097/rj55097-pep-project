@@ -11,15 +11,14 @@ public class AccountDAO {
         Connection connection = ConnectionUtil.getConnection();
         
         //Write SQL logic here
-        String sql = "insert into account (account_id, username, password) values (?, ?, ?)";
+        String sql = "insert into account (username, password) values (?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
         //write preparedStatement's setString and setInt methods here.
-        preparedStatement.setInt(1, account.getAccount_id());
-        preparedStatement.setString(2, account.getUsername());
-        preparedStatement.setString(3, account.getPassword());
+        preparedStatement.setString(1, account.getUsername());
+        preparedStatement.setString(2, account.getPassword());
 
         preparedStatement.executeUpdate();
-        return account;
+        return new Account(account.getUsername(), account.getPassword());
     }
 }
