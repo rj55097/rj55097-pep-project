@@ -33,10 +33,34 @@ public class MessageDAO {
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         ResultSet rs = preparedStatement.executeQuery();
         while(rs.next()){
-            Message message = new Message(rs.getInt("message_id"), rs.getInt("posted_by"), rs.getString("message_text"), rs.getLong("time_posted"));
+            Message message = new Message(rs.getInt("message_id"), 
+                    rs.getInt("posted_by"), 
+                    rs.getString("message_text"), 
+                    rs.getLong("time_posted"));
             messages.add(message);
         }
         return messages;
+    }
+
+    public Message getMessage(int message_id) throws SQLException{
+        Connection connection = ConnectionUtil.getConnection();
+        
+        //Write SQL logic here
+        String sql = "select * from message where message_id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+        //write preparedStatement's setInt method here.
+        preparedStatement.setInt(1, message_id);
+
+        ResultSet rs = preparedStatement.executeQuery();
+        while(rs.next()){
+            Message message = new Message(rs.getInt("message_id"),
+                    rs.getInt("posted_by"), 
+                    rs.getString("message_text"), 
+                    rs.getLong("time_posted"));
+            return message;
+        }
+        return null;
     }
 
 }

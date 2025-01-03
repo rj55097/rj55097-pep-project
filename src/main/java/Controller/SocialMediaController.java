@@ -42,7 +42,7 @@ public class SocialMediaController {
         // app.post("/login", this::postLoginHandler); // #2
         app.post("/messages", this::postMessageHandler); // #3
         app.get("/messages", this::getAllMessagesHandler); // #4
-        // app.get("/messages/{message_id}", this::getMessageHandler);// #5
+        app.get("/messages/{message_id}", this::getMessageHandler);// #5
         // app.delete("/messages/{message_id}", this::deleteMessageHandler)// #6
         // app.patch("/messages/{message_id}", this::patchMessageHandler);// #7
         // app.get("/accounts/{account_id}/messages", this::getAllMessagesByAccountHandler);// #8
@@ -63,7 +63,7 @@ public class SocialMediaController {
     }
 
     // #3
-    private void postMessageHandler(Context ctx) throws JsonProcessingException {
+    private void postMessageHandler(Context ctx) throws JsonProcessingException, SQLException {
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(ctx.body(), Message.class);
         Message addedMessage = messageService.addMessage(message);
@@ -78,6 +78,30 @@ public class SocialMediaController {
     private void getAllMessagesHandler(Context ctx) throws SQLException {
         List<Message> messages = messageService.getAllMessages();
         ctx.json(messages);
+    }
+
+    // #5
+    // public void getMessageHandler(Context ctx) {
+    //     String messageId = ctx.pathParam("message_id"); // Get the message_id from the path
+    //     Message message = messageService.getMessage(messageId); // Assume a service method to retrieve the message
+        
+    //     if (message != null) {
+    //         ctx.json(message); // Return the message as JSON
+    //     } else {
+    //         ctx.status(404);
+    //     }
+    // }
+
+    private void getMessageHandler(Context ctx) throws JsonProcessingException, SQLException {
+        ObjectMapper mapper = new ObjectMapper();
+        String messageIdString = ctx.pathParam("message_id");
+        int message_id = Integer.parseInt(messageIdString);
+        Message message = messageService.getMessage(message_id);
+        
+        if (message != null) {
+            ctx.json(mapper.writeValueAsString(message));
+        } else {
+        }
     }
 
 

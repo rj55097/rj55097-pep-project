@@ -19,7 +19,7 @@ public class MessageService {
         this.messageDAO = messageDAO;
     }
 
-    public Message addMessage(Message message) {
+    public Message addMessage(Message message) throws SQLException {
 
         if (messageDAO.getMessage(message.getMessage_id()) == null) {
             return messageDAO.addMessage(message);
@@ -30,5 +30,10 @@ public class MessageService {
     public List<Message> getAllMessages() throws SQLException{
         return messageDAO.getAllMessages();
     }
+
+    public Message getMessage(int message_id) throws SQLException {
+        return messageDAO.getMessage(message_id);
+    }
+    
     
 }
