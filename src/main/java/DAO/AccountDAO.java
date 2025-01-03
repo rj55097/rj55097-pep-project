@@ -17,7 +17,13 @@ public class AccountDAO {
         //write preparedStatement's setString and setInt methods here.
         preparedStatement.setString(1, account.getUsername());
         preparedStatement.setString(2, account.getPassword());
+        
+        if (account.getUsername() == "") {
 
+        } else if (account.getPassword().length() < 4) {
+            return null;
+        }
+        
         preparedStatement.executeUpdate();
         return new Account(account.getUsername(), account.getPassword());
     }
