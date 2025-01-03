@@ -11,7 +11,7 @@ public class MessageDAO {
         Connection connection = ConnectionUtil.getConnection();
         
         //Write SQL logic here
-        String sql = "insert into message (posted_by, message_text, time_posted) values (?, ?, ?, ?)";
+        String sql = "insert into message (posted_by, message_text, time_posted) values (?, ?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
         //write preparedStatement's setString and setInt methods here.
@@ -20,12 +20,7 @@ public class MessageDAO {
         preparedStatement.setLong(3, message.getTime_posted_epoch());
 
         preparedStatement.executeUpdate();
-        ResultSet pkeyResultSet = preparedStatement.getGeneratedKeys();
-            if(pkeyResultSet.next()){
-                int generated_message_id = (int) pkeyResultSet.getLong(1);
-                return new Message(generated_message_id, message.getPosted_by(), message.getMessage_text(), message.getTime_posted_epoch());
-            }
-        return message;
+        return new Message(message.getPosted_by(), message.getMessage_text(), message.getTime_posted_epoch());
     }
     
     public List<Message> getAllMessages() throws SQLException{
