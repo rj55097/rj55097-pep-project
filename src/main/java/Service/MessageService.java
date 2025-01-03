@@ -34,6 +34,10 @@ public class MessageService {
     public Message getMessage(int message_id) throws SQLException {
         return messageDAO.getMessage(message_id);
     }
+
+    public Message deleteMessage(int message_id) throws SQLException {
+        return messageDAO.deleteMessage(message_id);
+    }
     
     
 }

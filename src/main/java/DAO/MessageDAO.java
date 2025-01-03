@@ -66,4 +66,38 @@ public class MessageDAO {
         return null;
     }
 
+    public Message deleteMessage(int message_id) throws SQLException {
+        Connection connection = ConnectionUtil.getConnection();
+    
+        // get the message before deleting
+        String sql = "select * from message where message_id = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, message_id);
+
+        ResultSet rs = ps.executeQuery();
+
+        Message message = null;
+        if (rs.next()) {
+            message = new Message(
+                rs.getInt("message_id"),
+                rs.getInt("posted_by"),
+                rs.getString("message_text"),
+                rs.getLong("time_posted")
+            );
+        }
+
+        // return null if message not found
+        if (message == null) {
+            return null;
+        }
+
+        // Step 2: Delete the message
+        String deleteSql = "delete from message where message_id = ?";
+        PreparedStatement deletePreparedStatement = connection.prepareStatement(deleteSql);
+        deletePreparedStatement.setInt(1, message_id);
+        
+        deletePreparedStatement.executeUpdate();
+        return message;
+    }
+
 }

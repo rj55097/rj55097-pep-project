@@ -37,13 +37,12 @@ public class SocialMediaController {
      */
     public Javalin startAPI() {
         Javalin app = Javalin.create();
-        // app.get("example-endpoint", this::exampleHandler);
         app.post("/register", this::postAccountHandler); // #1
         // app.post("/login", this::postLoginHandler); // #2
         app.post("/messages", this::postMessageHandler); // #3
         app.get("/messages", this::getAllMessagesHandler); // #4
         app.get("/messages/{message_id}", this::getMessageHandler);// #5
-        // app.delete("/messages/{message_id}", this::deleteMessageHandler)// #6
+        app.delete("/messages/{message_id}", this::deleteMessageHandler)// #6
         // app.patch("/messages/{message_id}", this::patchMessageHandler);// #7
         // app.get("/accounts/{account_id}/messages", this::getAllMessagesByAccountHandler);// #8
         return app;
@@ -102,6 +101,19 @@ public class SocialMediaController {
             ctx.status(200);
         } else {
         }
+    }
+
+    // #6
+    private void deleteMessageHandler(Context ctx) throws JsonProcessingException, SQLException {
+        ObjectMapper mapper = new ObjectMapper();
+        String messageIdString = ctx.pathParam("message_id");
+        int message_id = Integer.parseInt(messageIdString);
+        Message message = messageService.deleteMessage(message_id);
+        
+        if (message != null) {
+            ctx.json(mapper.writeValueAsString(message));
+        }
+        ctx.status(200);
     }
 
 
