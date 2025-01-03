@@ -10,6 +10,20 @@ public class AccountDAO {
     public Account addAccount(Account account) throws SQLException{
         Connection connection = ConnectionUtil.getConnection();
         
+        String check = "select count(*) from account where username = ?";
+        PreparedStatement ps = connection.prepareStatement(check);
+        ps.setString(1, account.getUsername());
+        ResultSet resultSet = ps.executeQuery();
+
+        // if username already exists, return null
+        if (resultSet.next() && resultSet.getInt(1) > 0) {
+            return null;
+        }
+        // if username is blank or password is too short, return null
+        if (account.getUsername() == "" || account.getPassword().length() < 4) {
+            return null;
+        }
+
         //Write SQL logic here
         String sql = "insert into account (username, password) values (?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -17,13 +31,7 @@ public class AccountDAO {
         //write preparedStatement's setString and setInt methods here.
         preparedStatement.setString(1, account.getUsername());
         preparedStatement.setString(2, account.getPassword());
-        
-        if (account.getUsername() == "") {
 
-        } else if (account.getPassword().length() < 4) {
-            return null;
-        }
-        
         preparedStatement.executeUpdate();
         return new Account(account.getUsername(), account.getPassword());
     }
