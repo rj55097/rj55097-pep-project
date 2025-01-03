@@ -10,6 +10,10 @@ public class MessageDAO {
     public Message addMessage(Message message) throws SQLException{
         Connection connection = ConnectionUtil.getConnection();
         
+        if (message.getMessage_text() == "" || message.getMessage_text().length() > 255) {
+            return null;
+        }
+
         //Write SQL logic here
         String sql = "insert into message (posted_by, message_text, time_posted) values (?, ?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
