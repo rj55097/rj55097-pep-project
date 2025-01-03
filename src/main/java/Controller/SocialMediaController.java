@@ -58,8 +58,16 @@ public class SocialMediaController {
     // }
 
     // #1
-    private void postAccountHandler(Context ctx) throws JsonProcessingException {
-
+    private void postAccountHandler(Context ctx) throws JsonProcessingException, SQLException {
+        ObjectMapper mapper = new ObjectMapper();
+        Account account = mapper.readValue(ctx.body(), Account.class);
+        Account addedAccount = accountService.addAccount(account);
+        if(addedAccount!=null){
+            ctx.json(mapper.writeValueAsString(addedAccount));
+            ctx.status(200);
+        }else{
+            ctx.status(400);
+        }
     }
 
     // #3
@@ -69,6 +77,7 @@ public class SocialMediaController {
         Message addedMessage = messageService.addMessage(message);
         if(addedMessage!=null){
             ctx.json(mapper.writeValueAsString(addedMessage));
+            ctx.status(200);
         }else{
             ctx.status(400);
         }
@@ -78,20 +87,10 @@ public class SocialMediaController {
     private void getAllMessagesHandler(Context ctx) throws SQLException {
         List<Message> messages = messageService.getAllMessages();
         ctx.json(messages);
+        ctx.status(200);
     }
 
     // #5
-    // public void getMessageHandler(Context ctx) {
-    //     String messageId = ctx.pathParam("message_id"); // Get the message_id from the path
-    //     Message message = messageService.getMessage(messageId); // Assume a service method to retrieve the message
-        
-    //     if (message != null) {
-    //         ctx.json(message); // Return the message as JSON
-    //     } else {
-    //         ctx.status(404);
-    //     }
-    // }
-
     private void getMessageHandler(Context ctx) throws JsonProcessingException, SQLException {
         ObjectMapper mapper = new ObjectMapper();
         String messageIdString = ctx.pathParam("message_id");
@@ -100,6 +99,7 @@ public class SocialMediaController {
         
         if (message != null) {
             ctx.json(mapper.writeValueAsString(message));
+            ctx.status(200);
         } else {
         }
     }
