@@ -75,16 +75,17 @@ public class AccountDAO {
     public Account verifyLogin(Account account) throws SQLException {
         Connection connection = ConnectionUtil.getConnection();
 
-        String sql = "SELECT account WHERE username = ? AND password = ?";
+        String sql = "SELECT * FROM account WHERE username = ? AND password = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, account.getUsername());
         preparedStatement.setString(2, account.getPassword());
-        preparedStatement.executeUpdate();
 
-        ResultSet resultSet = preparedStatement.getGeneratedKeys();
+        ResultSet resultSet = preparedStatement.executeQuery();
+
         if (resultSet.next()) {
-            return new Account(account.getAccount_id(), account.getUsername(), account.getPassword());
+            return new Account(resultSet.getInt("account_id"), resultSet.getString("username"), resultSet.getString("password"));
         }
+
         return null;
     }
 }

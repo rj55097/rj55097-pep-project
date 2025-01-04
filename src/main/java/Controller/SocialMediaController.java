@@ -79,7 +79,7 @@ public class SocialMediaController {
             ctx.status(200).json(mapper.writeValueAsString(verifiedAccount));
             
         }else{
-            ctx.status(400);
+            ctx.status(401);
         }
     }
 
