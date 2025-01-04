@@ -21,10 +21,12 @@ public class MessageService {
 
     public Message addMessage(Message message) throws SQLException {
 
-        if (messageDAO.getMessage(message.getMessage_id()) == null) {
-            return messageDAO.addMessage(message);
-        }
-        return null;
+        // if (messageDAO.getMessage(message.getMessage_id()) == null) {
+        //     return messageDAO.addMessage(message);
+        // }
+        // return null;
+        return (message.getMessage_text() != "" && message.getMessage_text().length() <= 255)
+            ? messageDAO.addMessage(message) : null;
     }
 
     public List<Message> getAllMessages() throws SQLException{

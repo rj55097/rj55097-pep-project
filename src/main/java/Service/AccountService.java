@@ -4,8 +4,6 @@ import Model.Account;
 import DAO.AccountDAO;
 
 import java.sql.SQLException;
-import java.util.List;
-
 
 public class AccountService {
     public AccountDAO accountDAO;
