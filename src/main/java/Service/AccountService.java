@@ -28,7 +28,7 @@ public class AccountService {
             ? accountDAO.registerAccount(account) : null;
     }
 
-    public Account verifyLogin (Account account) {
+    public Account verifyLogin (Account account) throws SQLException {
         return accountDAO.verifyLogin(account);
     }
 

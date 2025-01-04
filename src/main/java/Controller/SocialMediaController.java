@@ -71,7 +71,7 @@ public class SocialMediaController {
     }
 
     // #2 
-    private void postLoginHandler(Context ctx) throws JsonMappingException, JsonProcessingException {
+    private void postLoginHandler(Context ctx) throws JsonMappingException, JsonProcessingException, SQLException {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(ctx.body(), Account.class);
         Account verifiedAccount = accountService.verifyLogin(account);
