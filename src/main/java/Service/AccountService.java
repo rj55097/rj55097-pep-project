@@ -28,5 +28,9 @@ public class AccountService {
             ? accountDAO.registerAccount(account) : null;
     }
 
+    public Account verifyLogin (Account account) {
+        return accountDAO.verifyLogin(account);
+    }
+
     
 }

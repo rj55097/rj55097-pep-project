@@ -71,4 +71,9 @@ public class AccountDAO {
         }
         return null;
     }
+
+    public Account verifyLogin(Account account) {
+
+        return null;
+    }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import org.eclipse.jetty.websocket.core.internal.messages.MessageReader;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import Model.Account;
@@ -38,7 +39,7 @@ public class SocialMediaController {
     public Javalin startAPI() {
         Javalin app = Javalin.create();
         app.post("/register", this::postAccountHandler); // #1
-        // app.post("/login", this::postLoginHandler); // #2
+        app.post("/login", this::postLoginHandler); // #2
         app.post("/messages", this::postMessageHandler); // #3
         app.get("/messages", this::getAllMessagesHandler); // #4
         app.get("/messages/{message_id}", this::getMessageHandler);// #5
@@ -69,14 +70,26 @@ public class SocialMediaController {
         }
     }
 
+    // #2 
+    private void postLoginHandler(Context ctx) throws JsonMappingException, JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Account account = mapper.readValue(ctx.body(), Account.class);
+        Account verifiedAccount = accountService.verifyLogin(account);
+        if(verifiedAccount!=null){
+            ctx.status(200).json(mapper.writeValueAsString(verifiedAccount));
+            
+        }else{
+            ctx.status(400);
+        }
+    }
+
     // #3
     private void postMessageHandler(Context ctx) throws JsonProcessingException, SQLException {
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(ctx.body(), Message.class);
         Message addedMessage = messageService.addMessage(message);
         if(addedMessage!=null){
-            ctx.json(mapper.writeValueAsString(addedMessage));
-            ctx.status(200);
+            ctx.status(200).json(mapper.writeValueAsString(addedMessage));
         }else{
             ctx.status(400);
         }
