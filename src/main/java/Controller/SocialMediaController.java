@@ -151,14 +151,11 @@ public class SocialMediaController {
         }
     }
 
-    private void getAllMessagesByAccountHandler(Context ctx) throws SQLException {
-        String accountIdString = ctx.pathParam("account_id");
-        int account_id = Integer.parseInt(accountIdString);
-        
-        List<Message> messages = messageService.getAllMessagesByAccount(account_id);
-        ctx.json(messages);
-        ctx.status(200);
+    private void getAllMessagesByAccountHandler(Context ctx) throws JsonProcessingException, NumberFormatException, SQLException{
+        ObjectMapper mapper = new ObjectMapper();
+        List <Message> messages = messageService.getAllMessagesByAccount(Integer.parseInt(ctx.pathParam("account_id" )));
+        if(messages != null ) ctx.status(200).json(mapper.writeValueAsString(messages)) ;
+        else ctx.status(200);
     }
-
 
 }

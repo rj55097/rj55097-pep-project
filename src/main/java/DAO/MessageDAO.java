@@ -120,23 +120,27 @@ public class MessageDAO {
         return null;
     }
 
-    public List<Message> getAllMessagesByAccount(int account_id) throws SQLException {
+    public List<Message> getAllMessagesByAccount(int account_id){
         Connection connection = ConnectionUtil.getConnection();
-        List<Message> messages = new ArrayList<>();
-       
-        //Write SQL logic here
-        String sql = "SELECT * FROM message WHERE account_id = ?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setInt(1, account_id);
-        ResultSet rs = preparedStatement.executeQuery();
-        while(rs.next()){
-            Message message = new Message(rs.getInt("message_id"), 
-                    rs.getInt("posted_by"), 
-                    rs.getString("message_text"), 
-                    rs.getLong("time_posted_epoch"));
-            messages.add(message);
+        try {
+            List<Message> messages = new ArrayList<Message>();
+            String sql = "SELECT * FROM message WHERE posted_by = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, account_id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                messages.add(new Message(
+                    resultSet.getInt("message_id"),
+                    resultSet.getInt("posted_by"),
+                    resultSet.getString("message_text"),
+                    resultSet.getLong("time_posted_epoch")
+                ));
+            };
+            return messages;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
-        return messages;
+        return null;
     }
 
 }
