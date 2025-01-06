@@ -102,8 +102,18 @@ public class MessageDAO {
         return message;
     }
 
-    public Message patchMessage(int message_id) throws SQLException {
+    public Message patchMessage(int message_id, String message_text) throws SQLException {
         Connection connection = ConnectionUtil.getConnection();
+
+        String sql = "UPDATE message SET message_text = ? WHERE message_id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setString(1, message_text);
+        preparedStatement.setInt(2, message_id);
+        
+        int rowsUpdated = preparedStatement.executeUpdate();
+        if (rowsUpdated > 0) {
+            return getMessage(message_id);
+        }
 
         return null;
     }

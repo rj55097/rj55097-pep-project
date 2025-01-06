@@ -7,6 +7,7 @@ import org.eclipse.jetty.websocket.core.internal.messages.MessageReader;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import Model.Account;
@@ -120,23 +121,37 @@ public class SocialMediaController {
         ObjectMapper mapper = new ObjectMapper();
         String messageIdString = ctx.pathParam("message_id");
         int message_id = Integer.parseInt(messageIdString);
-        Message message = messageService.deleteMessage(message_id);
-        
-        if (message != null) {
-            ctx.json(mapper.writeValueAsString(message));
+        try {
+            Message message = messageService.deleteMessage(message_id);
+            
+            if (message != null) {
+                ctx.json(mapper.writeValueAsString(message));
+            }
+            ctx.status(200);
+        } catch (SQLException e) {
+            ctx.status(500).result("Database error: " + e.getMessage());
+            e.printStackTrace(); // For debugging
         }
-        ctx.status(200);
     }
 
     // #7
     private void patchMessageHandler(Context ctx) throws JsonProcessingException, SQLException {
         ObjectMapper mapper = new ObjectMapper();
+        
+        // Extract the message_id from the URL path parameter
         String messageIdString = ctx.pathParam("message_id");
         int message_id = Integer.parseInt(messageIdString);
-        Message message = messageService.patchMessage(message_id);
         
-        if (message != null) {
-            ctx.json(mapper.writeValueAsString(message));
+        // Parse the request body to extract the new message_text value
+        JsonNode requestBody = mapper.readTree(ctx.body());
+        String message_text = requestBody.get("message_text").asText();
+
+        // Pass the message_id and new message_text to your service for updating
+        Message updatedMessage = messageService.patchMessage(message_id, message_text);
+        
+        if (updatedMessage != null) {
+            // Respond with the updated message
+            ctx.json(mapper.writeValueAsString(updatedMessage));
             ctx.status(200);
         } else {
             ctx.status(400);

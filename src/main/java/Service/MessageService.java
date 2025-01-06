@@ -41,8 +41,8 @@ public class MessageService {
         return messageDAO.deleteMessage(message_id);
     }
 
-    public Message patchMessage(int message_id) throws SQLException {
-        return messageDAO.patchMessage(message_id);
+    public Message patchMessage(int message_id, String message_text) throws SQLException {
+        return messageDAO.patchMessage(message_id, message_text);
     }
     
     
