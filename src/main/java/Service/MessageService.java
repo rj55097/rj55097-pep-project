@@ -45,6 +45,10 @@ public class MessageService {
         return (message_text != "" && message_text.length() <= 255)
             ? messageDAO.patchMessage(message_id, message_text) : null;
     }
+
+    public List<Message> getAllMessagesByAccount (int account_id) throws SQLException {
+        return messageDAO.getAllMessagesByAccount(account_id);
+    }
     
     
 }

@@ -46,7 +46,7 @@ public class SocialMediaController {
         app.get("/messages/{message_id}", this::getMessageHandler);// #5
         app.delete("/messages/{message_id}", this::deleteMessageHandler);// #6
         app.patch("/messages/{message_id}", this::patchMessageHandler);// #7
-        // app.get("/accounts/{account_id}/messages", this::getAllMessagesByAccountHandler);// #8
+        app.get("/accounts/{account_id}/messages", this::getAllMessagesByAccountHandler);// #8
         return app;
     }
 
@@ -156,6 +156,15 @@ public class SocialMediaController {
         } else {
             ctx.status(400);
         }
+    }
+
+    private void getAllMessagesByAccountHandler(Context ctx) throws SQLException {
+        String accountIdString = ctx.pathParam("account_id");
+        int account_id = Integer.parseInt(accountIdString);
+        
+        List<Message> messages = messageService.getAllMessagesByAccount(account_id);
+        ctx.json(messages);
+        ctx.status(200);
     }
 
 
