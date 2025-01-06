@@ -151,6 +151,7 @@ public class SocialMediaController {
         }
     }
 
+    // # 8
     private void getAllMessagesByAccountHandler(Context ctx) throws JsonProcessingException, NumberFormatException, SQLException{
         ObjectMapper mapper = new ObjectMapper();
         List <Message> messages = messageService.getAllMessagesByAccount(Integer.parseInt(ctx.pathParam("account_id" )));
