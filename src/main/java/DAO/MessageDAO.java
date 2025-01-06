@@ -93,13 +93,19 @@ public class MessageDAO {
             return null;
         }
 
-        // Step 2: Delete the message
+        // delete message
         String deleteSql = "delete from message where message_id = ?";
         PreparedStatement deletePreparedStatement = connection.prepareStatement(deleteSql);
         deletePreparedStatement.setInt(1, message_id);
         
         deletePreparedStatement.executeUpdate();
         return message;
+    }
+
+    public Message patchMessage(int message_id) throws SQLException {
+        Connection connection = ConnectionUtil.getConnection();
+
+        return null;
     }
 
 }
