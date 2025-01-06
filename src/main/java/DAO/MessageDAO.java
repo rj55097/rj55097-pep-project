@@ -11,7 +11,7 @@ public class MessageDAO {
         Connection connection = ConnectionUtil.getConnection();
 
         try {
-            String sql = "insert into message (posted_by, message_text, time_posted) values (?, ?, ?)";
+            String sql = "INSERT INTO message (posted_by, message_text, time_posted) VALUES (?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, message.getPosted_by());
             preparedStatement.setString(2, message.getMessage_text());
@@ -34,7 +34,7 @@ public class MessageDAO {
         List<Message> messages = new ArrayList<>();
        
         //Write SQL logic here
-        String sql = "select * from message";
+        String sql = "SELECT * FROM message";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         ResultSet rs = preparedStatement.executeQuery();
         while(rs.next()){
@@ -51,7 +51,7 @@ public class MessageDAO {
         Connection connection = ConnectionUtil.getConnection();
         
         //Write SQL logic here
-        String sql = "select * from message where message_id = ?";
+        String sql = "SELECT * FROM message WHERE message_id = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
         //write preparedStatement's setInt method here.
@@ -72,7 +72,7 @@ public class MessageDAO {
         Connection connection = ConnectionUtil.getConnection();
     
         // get the message before deleting
-        String sql = "select * from message where message_id = ?";
+        String sql = "SELECT * FROM message WHERE message_id = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, message_id);
 
@@ -94,7 +94,7 @@ public class MessageDAO {
         }
 
         // delete message
-        String deleteSql = "delete from message where message_id = ?";
+        String deleteSql = "DELETE FROM message WHERE message_id = ?";
         PreparedStatement deletePreparedStatement = connection.prepareStatement(deleteSql);
         deletePreparedStatement.setInt(1, message_id);
         

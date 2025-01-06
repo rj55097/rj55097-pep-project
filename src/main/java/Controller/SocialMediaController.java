@@ -3,8 +3,6 @@ package Controller;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.eclipse.jetty.websocket.core.internal.messages.MessageReader;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -121,17 +119,12 @@ public class SocialMediaController {
         ObjectMapper mapper = new ObjectMapper();
         String messageIdString = ctx.pathParam("message_id");
         int message_id = Integer.parseInt(messageIdString);
-        try {
-            Message message = messageService.deleteMessage(message_id);
+        Message message = messageService.deleteMessage(message_id);
             
-            if (message != null) {
-                ctx.json(mapper.writeValueAsString(message));
-            }
-            ctx.status(200);
-        } catch (SQLException e) {
-            ctx.status(500).result("Database error: " + e.getMessage());
-            e.printStackTrace(); // For debugging
+        if (message != null) {
+            ctx.json(mapper.writeValueAsString(message));
         }
+        ctx.status(200);
     }
 
     // #7
