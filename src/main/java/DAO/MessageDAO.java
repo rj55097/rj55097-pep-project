@@ -26,23 +26,25 @@ public class MessageDAO {
             System.out.println(e.getMessage());
         }   
         return null;
-        // return new Message(message.getPosted_by(), message.getMessage_text(), message.getTime_posted_epoch());
     }
     
     public List<Message> getAllMessages() throws SQLException{
         Connection connection = ConnectionUtil.getConnection();
         List<Message> messages = new ArrayList<>();
        
-        //Write SQL logic here
-        String sql = "SELECT * FROM message";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        ResultSet rs = preparedStatement.executeQuery();
-        while(rs.next()){
-            Message message = new Message(rs.getInt("message_id"), 
-                    rs.getInt("posted_by"), 
-                    rs.getString("message_text"), 
-                    rs.getLong("time_posted"));
-            messages.add(message);
+        try {
+            String sql = "SELECT * FROM message";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                Message message = new Message(rs.getInt("message_id"), 
+                        rs.getInt("posted_by"), 
+                        rs.getString("message_text"), 
+                        rs.getLong("time_posted"));
+                messages.add(message);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
         return messages;
     }
