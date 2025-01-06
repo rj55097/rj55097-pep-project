@@ -8,11 +8,11 @@ public class AccountDAO {
 
     public Account verifyAccount(Account acc) throws SQLException{
         Connection connection = ConnectionUtil.getConnection();
+
         try {
-            String sql = "SELECT * FROM account WHERE username =? AND password =?";
+            String sql = "SELECT * FROM account WHERE username =?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, acc.getUsername());
-            preparedStatement.setString(2, acc.getPassword());
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()) {
                 return new Account(resultSet.getInt("account_id"), acc.getUsername(), acc.getPassword());
@@ -25,6 +25,7 @@ public class AccountDAO {
 
     public Account registerAccount(Account acc) throws SQLException{
         Connection connection = ConnectionUtil.getConnection();
+
         try {
             String sql = "INSERT INTO account (username, password) VALUES (?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);

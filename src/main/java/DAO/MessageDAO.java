@@ -36,6 +36,8 @@ public class MessageDAO {
             String sql = "SELECT * FROM message";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet rs = preparedStatement.executeQuery();
+
+            // creating list
             while(rs.next()){
                 Message message = new Message(rs.getInt("message_id"), 
                         rs.getInt("posted_by"), 
@@ -99,8 +101,8 @@ public class MessageDAO {
         String deleteSql = "DELETE FROM message WHERE message_id = ?";
         PreparedStatement deletePreparedStatement = connection.prepareStatement(deleteSql);
         deletePreparedStatement.setInt(1, message_id);
-        
         deletePreparedStatement.executeUpdate();
+
         return message;
     }
 
@@ -113,7 +115,7 @@ public class MessageDAO {
         preparedStatement.setInt(2, message_id);
         
         int rowsUpdated = preparedStatement.executeUpdate();
-        if (rowsUpdated > 0) {
+        if (rowsUpdated > 0) { // if there was a message with the matching id
             return getMessage(message_id);
         }
 
@@ -128,6 +130,8 @@ public class MessageDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, account_id);
             ResultSet resultSet = preparedStatement.executeQuery();
+
+            // creating the list
             while (resultSet.next()) {
                 messages.add(new Message(
                     resultSet.getInt("message_id"),

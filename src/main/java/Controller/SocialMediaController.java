@@ -37,6 +37,7 @@ public class SocialMediaController {
      */
     public Javalin startAPI() {
         Javalin app = Javalin.create();
+
         app.post("/register", this::postAccountHandler); // #1
         app.post("/login", this::postLoginHandler); // #2
         app.post("/messages", this::postMessageHandler); // #3
@@ -45,22 +46,16 @@ public class SocialMediaController {
         app.delete("/messages/{message_id}", this::deleteMessageHandler);// #6
         app.patch("/messages/{message_id}", this::patchMessageHandler);// #7
         app.get("/accounts/{account_id}/messages", this::getAllMessagesByAccountHandler);// #8
+
         return app;
     }
-
-    // /**
-    //  * This is an example handler for an example endpoint.
-    //  * @param context The Javalin Context object manages information about both the HTTP request and response.
-    //  */
-    // private void exampleHandler(Context context) {
-    //     context.json("sample text");
-    // }
 
     // #1
     private void postAccountHandler(Context ctx) throws JsonProcessingException, SQLException {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(ctx.body(), Account.class);
         Account addedAccount = accountService.addAccount(account);
+
         if(addedAccount!=null){
             ctx.status(200).json(mapper.writeValueAsString(addedAccount));
             
@@ -74,6 +69,7 @@ public class SocialMediaController {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(ctx.body(), Account.class);
         Account verifiedAccount = accountService.verifyLogin(account);
+
         if(verifiedAccount!=null){
             ctx.status(200).json(mapper.writeValueAsString(verifiedAccount));
             
@@ -87,6 +83,7 @@ public class SocialMediaController {
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(ctx.body(), Message.class);
         Message addedMessage = messageService.addMessage(message);
+
         if(addedMessage!=null){
             ctx.status(200).json(mapper.writeValueAsString(addedMessage));
         }else{
@@ -131,19 +128,17 @@ public class SocialMediaController {
     private void patchMessageHandler(Context ctx) throws JsonProcessingException, SQLException {
         ObjectMapper mapper = new ObjectMapper();
         
-        // Extract the message_id from the URL path parameter
+        // getting message_id
         String messageIdString = ctx.pathParam("message_id");
         int message_id = Integer.parseInt(messageIdString);
         
-        // Parse the request body to extract the new message_text value
+        // getting message_text
         JsonNode requestBody = mapper.readTree(ctx.body());
         String message_text = requestBody.get("message_text").asText();
 
-        // Pass the message_id and new message_text to your service for updating
         Message updatedMessage = messageService.patchMessage(message_id, message_text);
         
         if (updatedMessage != null) {
-            // Respond with the updated message
             ctx.json(mapper.writeValueAsString(updatedMessage));
             ctx.status(200);
         } else {
@@ -151,11 +146,11 @@ public class SocialMediaController {
         }
     }
 
-    // # 8
+    // #8
     private void getAllMessagesByAccountHandler(Context ctx) throws JsonProcessingException, NumberFormatException, SQLException{
         ObjectMapper mapper = new ObjectMapper();
         List <Message> messages = messageService.getAllMessagesByAccount(Integer.parseInt(ctx.pathParam("account_id" )));
-        if(messages != null ) ctx.status(200).json(mapper.writeValueAsString(messages)) ;
+        if(messages != null ) ctx.status(200).json(mapper.writeValueAsString(messages));
         else ctx.status(200);
     }
 

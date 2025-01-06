@@ -57,6 +57,7 @@ public class MessageService {
     }
 
     public Message patchMessage(int message_id, String message_text) throws SQLException {
+        // checking if message is valid
         return (message_text != "" && message_text.length() <= 255)
             ? messageDAO.patchMessage(message_id, message_text) : null;
     }
