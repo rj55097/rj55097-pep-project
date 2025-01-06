@@ -11,7 +11,7 @@ public class MessageDAO {
         Connection connection = ConnectionUtil.getConnection();
 
         try {
-            String sql = "INSERT INTO message (posted_by, message_text, time_posted) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO message (posted_by, message_text, time_posted_epoch) VALUES (?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, message.getPosted_by());
             preparedStatement.setString(2, message.getMessage_text());
@@ -40,7 +40,7 @@ public class MessageDAO {
                 Message message = new Message(rs.getInt("message_id"), 
                         rs.getInt("posted_by"), 
                         rs.getString("message_text"), 
-                        rs.getLong("time_posted"));
+                        rs.getLong("time_posted_epoch"));
                 messages.add(message);
             }
         } catch (SQLException e) {
@@ -64,7 +64,7 @@ public class MessageDAO {
             Message message = new Message(rs.getInt("message_id"),
                     rs.getInt("posted_by"), 
                     rs.getString("message_text"), 
-                    rs.getLong("time_posted"));
+                    rs.getLong("time_posted_epoch"));
             return message;
         }
         return null;
@@ -86,7 +86,7 @@ public class MessageDAO {
                 rs.getInt("message_id"),
                 rs.getInt("posted_by"),
                 rs.getString("message_text"),
-                rs.getLong("time_posted")
+                rs.getLong("time_posted_epoch")
             );
         }
 
@@ -133,7 +133,7 @@ public class MessageDAO {
             Message message = new Message(rs.getInt("message_id"), 
                     rs.getInt("posted_by"), 
                     rs.getString("message_text"), 
-                    rs.getLong("time_posted"));
+                    rs.getLong("time_posted_epoch"));
             messages.add(message);
         }
         return messages;
